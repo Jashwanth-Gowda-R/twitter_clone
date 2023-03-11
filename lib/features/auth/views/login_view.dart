@@ -1,19 +1,22 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/common/loading_page.dart';
 import 'package:twitter_clone/common/rounded_small_button.dart';
 import 'package:twitter_clone/constants/constants.dart';
+import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone/features/auth/views/signup_view.dart';
 import 'package:twitter_clone/features/auth/widgets/auth_field.dart';
 import 'package:twitter_clone/theme/pallete.dart';
 
-class LoginView extends StatefulWidget {
+class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  ConsumerState<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends ConsumerState<LoginView> {
   // to avoid rebuilding
   final appBar = UIConstants.appBar();
   // text fields
@@ -28,75 +31,86 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
+  void login() {
+    final res = ref.read(authControllerProvider.notifier).login(
+          email: _email.text,
+          password: _password.text,
+          context: context,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isloading = ref.watch(authControllerProvider);
     return Scaffold(
       appBar: appBar,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-            ),
-            child: Column(
-              children: [
-                AuthField(
-                  controller: _email,
-                  hint: 'Email',
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                AuthField(
-                  controller: _password,
-                  hint: 'Password',
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: RoundedSmallButton(
-                    label: 'Done',
-                    onTap: () {},
-                    backgroundColor: Pallete.whiteColor,
-                    textColor: Pallete.backgroundColor,
+      body: isloading
+          ? const Loader()
+          : Center(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
                   ),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                RichText(
-                  text: TextSpan(
-                    text: "Don't have and account?",
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
+                  child: Column(
                     children: [
-                      TextSpan(
-                        text: " Sign up",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Pallete.blueColor,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SignUpView(),
-                              ),
-                            );
-                          },
+                      AuthField(
+                        controller: _email,
+                        hint: 'Email',
                       ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      AuthField(
+                        controller: _password,
+                        hint: 'Password',
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: RoundedSmallButton(
+                          label: 'Done',
+                          onTap: login,
+                          backgroundColor: Pallete.whiteColor,
+                          textColor: Pallete.backgroundColor,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: "Don't have and account?",
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: " Sign up",
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Pallete.blueColor,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const SignUpView(),
+                                    ),
+                                  );
+                                },
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                )
-              ],
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }
