@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:twitter_clone/apis/auth_api.dart';
 import 'package:twitter_clone/core/utils.dart';
+import 'package:twitter_clone/features/auth/views/login_view.dart';
+import 'package:twitter_clone/features/home/view/home_view.dart';
 
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) {
@@ -30,7 +32,10 @@ class AuthController extends StateNotifier<bool> {
     state = true;
     res.fold(
       (l) => showSnackBar(context, l.message),
-      (r) => print(r.email),
+      (r) => {
+        showSnackBar(context, "Account has been created!"),
+        Navigator.push(context, LoginView.route())
+      },
     );
   }
 
@@ -47,7 +52,10 @@ class AuthController extends StateNotifier<bool> {
     state = true;
     res.fold(
       (l) => showSnackBar(context, l.message),
-      (r) => print(r.userId),
+      (r) => {
+        showSnackBar(context, "Account has been created!"),
+        Navigator.push(context, HomeView.route())
+      },
     );
   }
 }

@@ -10,6 +10,9 @@ import 'package:twitter_clone/features/auth/widgets/auth_field.dart';
 import 'package:twitter_clone/theme/pallete.dart';
 
 class LoginView extends ConsumerStatefulWidget {
+  static route() => MaterialPageRoute(
+        builder: (context) => const LoginView(),
+      );
   const LoginView({super.key});
 
   @override
