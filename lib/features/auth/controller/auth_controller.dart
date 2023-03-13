@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:appwrite/models.dart' as models;
+
 import 'package:twitter_clone/apis/auth_api.dart';
 import 'package:twitter_clone/core/utils.dart';
 import 'package:twitter_clone/features/auth/views/login_view.dart';
@@ -11,6 +13,11 @@ final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) {
   final authAPI = ref.watch(authAPIProvider);
   return AuthController(authAPI: authAPI);
+});
+
+final currentUserAccountProvider = FutureProvider((ref) {
+  final authController = ref.watch(authControllerProvider.notifier);
+  return authController.currentUser();
 });
 
 class AuthController extends StateNotifier<bool> {
@@ -58,4 +65,6 @@ class AuthController extends StateNotifier<bool> {
       },
     );
   }
+
+  Future<models.Account?> currentUser() => _authAPI.currentUserAccount();
 }
