@@ -100,9 +100,10 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                                 ..onTap = () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginView(),
-                                    ),
+                                    // MaterialPageRoute(
+                                    //   builder: (context) => const LoginView(),
+                                    // ),
+                                    LoginView.route(),
                                   );
                                 },
                             ),

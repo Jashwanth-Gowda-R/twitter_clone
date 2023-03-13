@@ -8,7 +8,9 @@ import 'package:twitter_clone/theme/app_theme.dart';
 
 void main() {
   runApp(
-    const ProviderScope(child: MyApp()),
+    const ProviderScope(
+      child: MyApp(),
+    ),
   );
 }
 
@@ -20,7 +22,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Twitter',
       theme: AppTheme.theme,
       home: ref.watch(currentUserAccountProvider).when(
             data: (user) {

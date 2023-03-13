@@ -15,6 +15,7 @@ final authControllerProvider =
   return AuthController(authAPI: authAPI);
 });
 
+// current user
 final currentUserAccountProvider = FutureProvider((ref) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.currentUser();

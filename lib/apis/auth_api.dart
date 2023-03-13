@@ -8,11 +8,13 @@ import 'package:twitter_clone/core/providers.dart';
 
 import 'package:twitter_clone/core/type_defs.dart';
 
+// auth API Provider
 final authAPIProvider = Provider((ref) {
   var account = ref.watch(appwriteAccountProvider);
   return AuthAPI(account: account);
 });
 
+// abstract class for auth api
 abstract class IAuthAPI {
   FutureEither<models.Account> signUp({
     required String email,
