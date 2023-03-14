@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:twitter_clone/constants/assets_constants.dart';
 import 'package:twitter_clone/constants/ui_constants.dart';
+import 'package:twitter_clone/features/tweet/views/create_tweet_view.dart';
 import 'package:twitter_clone/theme/pallete.dart';
 
 class HomeView extends StatefulWidget {
@@ -34,7 +35,12 @@ class _HomeViewState extends State<HomeView> {
         children: UIConstants.bottomTabBarPages,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            CreateTweetScreen.route(),
+          );
+        },
         child: const Icon(
           Icons.add,
           color: Pallete.whiteColor,

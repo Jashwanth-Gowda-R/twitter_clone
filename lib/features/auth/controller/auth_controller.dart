@@ -10,6 +10,7 @@ import 'package:twitter_clone/features/auth/views/login_view.dart';
 import 'package:twitter_clone/features/home/view/home_view.dart';
 import 'package:twitter_clone/models/user_model.dart';
 
+// providers
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) {
   final authAPI = ref.watch(authAPIProvider);
@@ -21,6 +22,19 @@ final authControllerProvider =
 final currentUserAccountProvider = FutureProvider((ref) {
   final authController = ref.watch(authControllerProvider.notifier);
   return authController.currentUser();
+});
+
+// user details
+final userDetailsProvider = FutureProvider.family((ref, String uid) async {
+  final authController = ref.watch(authControllerProvider.notifier);
+  return authController.getUserData(uid);
+});
+
+// current user details
+final currentUserDetailsProvider = FutureProvider((ref) {
+  final currentUserID = ref.watch(currentUserAccountProvider).value!.$id;
+  final userDetails = ref.watch(userDetailsProvider(currentUserID));
+  return userDetails.value;
 });
 
 class AuthController extends StateNotifier<bool> {
@@ -99,4 +113,10 @@ class AuthController extends StateNotifier<bool> {
   }
 
   Future<models.Account?> currentUser() => _authAPI.currentUserAccount();
+
+  Future<UserModel> getUserData(String uid) async {
+    final document = await _userAPI.getUserData(uid);
+    final updatedUser = UserModel.fromMap(document.data);
+    return updatedUser;
+  }
 }
