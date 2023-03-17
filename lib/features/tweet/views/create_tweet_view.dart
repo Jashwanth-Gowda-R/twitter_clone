@@ -32,6 +32,7 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(currentUserDetailsProvider).value;
+    print({"currentUser": currentUser});
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -52,43 +53,45 @@ class _CreateTweetScreenState extends ConsumerState<CreateTweetScreen> {
           )
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(currentUser!.profilePic),
-                    radius: 30,
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: tweetTextController,
-                      style: const TextStyle(
-                        fontSize: 22,
-                      ),
-                      decoration: const InputDecoration(
-                        hintText: "What's happening?",
-                        hintStyle: TextStyle(
-                          color: Pallete.greyColor,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
+      body: currentUser == null
+          ? const Loader()
+          : SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(currentUser.profilePic ),
+                          radius: 30,
                         ),
-                        border: InputBorder.none,
-                      ),
-                      maxLines: null,
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: TextField(
+                            controller: tweetTextController,
+                            style: const TextStyle(
+                              fontSize: 22,
+                            ),
+                            decoration: const InputDecoration(
+                              hintText: "What's happening?",
+                              hintStyle: TextStyle(
+                                color: Pallete.greyColor,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                            maxLines: null,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.only(bottom: 10),
         decoration: const BoxDecoration(
