@@ -2,6 +2,8 @@
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:like_button/like_button.dart';
 import 'package:twitter_clone/constants/assets_constants.dart';
 import 'package:twitter_clone/core/enums/tweet_type_enum.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
@@ -108,11 +110,42 @@ class TweetCard extends ConsumerWidget {
                                   pathName: AssetsConstants.retweetIcon,
                                   text: tweet.reshareCount.toString(),
                                 ),
-                                TweetIconButton(
-                                  onTap: () {},
-                                  pathName: AssetsConstants.likeOutlinedIcon,
-                                  text: tweet.likes.length.toString(),
+                                LikeButton(
+                                  size: 25,
+                                  likeBuilder: (isLiked) {
+                                    return isLiked
+                                        ? SvgPicture.asset(
+                                            AssetsConstants.likeFilledIcon,
+                                            color: Pallete.redColor,
+                                          )
+                                        : SvgPicture.asset(
+                                            AssetsConstants.likeOutlinedIcon,
+                                            color: Pallete.greyColor,
+                                          );
+                                  },
+                                  likeCount: tweet.likes.length,
+                                  countBuilder: (likeCount, isLiked, text) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 2.0,
+                                      ),
+                                      child: Text(
+                                        text,
+                                        style: TextStyle(
+                                          color: isLiked
+                                              ? Pallete.redColor
+                                              : Pallete.whiteColor,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
+                                // TweetIconButton(
+                                //   onTap: () {},
+                                //   pathName: AssetsConstants.likeOutlinedIcon,
+                                //   text: tweet.likes.length.toString(),
+                                // ),
                                 IconButton(
                                   onPressed: () {},
                                   icon: const Icon(
