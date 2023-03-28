@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone/common/common.dart';
 import 'package:twitter_clone/features/auth/controller/auth_controller.dart';
+import 'package:twitter_clone/features/tweet/widgets/tweet_card.dart';
+import 'package:twitter_clone/features/user_profile/controller/user_profile_controller.dart';
+import 'package:twitter_clone/features/user_profile/widget/follow_count.dart';
 
 import 'package:twitter_clone/models/user_model.dart';
 import 'package:twitter_clone/theme/pallete.dart';
@@ -69,10 +72,78 @@ class UserProfile extends ConsumerWidget {
                       ),
                     ],
                   ),
-                )
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.all(8),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        Text(
+                          user.name,
+                          style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Text(
+                          '@{ user.name}',
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: Pallete.blueColor,
+                          ),
+                        ),
+                        Text(
+                          user.bio,
+                          style: const TextStyle(
+                            fontSize: 17,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            FollowCount(
+                              count: user.following.length - 1,
+                              text: 'Following',
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            FollowCount(
+                              count: user.followers.length - 1,
+                              text: 'Followers',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 2,
+                        ),
+                        const Divider(
+                          color: Pallete.whiteColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ];
             },
-            body: Container(),
-          );
+            body: ref.watch(getUserTweetsProvider(user.uid)).when(
+                  data: (tweets) {
+                    return ListView.builder(
+                      itemCount: tweets.length,
+                      itemBuilder: (context, index) {
+                        final tweet = tweets[index];
+                        return TweetCard(tweet: tweet);
+                      },
+                    );
+                  },
+                  error: (e, st) {
+                    return ErrorText(
+                      error: e.toString(),
+                    );
+                  },
+                  loading: () => const Loader(),
+                ));
   }
 }
