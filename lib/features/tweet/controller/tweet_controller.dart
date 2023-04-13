@@ -124,12 +124,12 @@ class TweetController extends StateNotifier<bool> {
         res2.fold(
           (l) => showSnackBar(context, l.message),
           (r) {
-            // _notificationController.createNotification(
-            //   text: '${currentUser.name} reshared your tweet!',
-            //   postId: tweet.id,
-            //   notificationType: NotificationType.retweet,
-            //   uid: tweet.uid,
-            // );
+            _notificationController.createNotification(
+              text: '${currentUser.name} reshared your tweet!',
+              postId: tweet.id,
+              notificationType: NotificationType.retweet,
+              uid: tweet.uid,
+            );
             showSnackBar(context, 'Retweeted!');
           },
         );
@@ -208,12 +208,12 @@ class TweetController extends StateNotifier<bool> {
 
     res.fold((l) => showSnackBar(context, l.message), (r) {
       if (repliedToUserId.isNotEmpty) {
-        // _notificationController.createNotification(
-        //   text: '${user.name} replied to your tweet!',
-        //   postId: r.$id,
-        //   notificationType: NotificationType.reply,
-        //   uid: repliedToUserId,
-        // );
+        _notificationController.createNotification(
+          text: '${user.name} replied to your tweet!',
+          postId: r.$id,
+          notificationType: NotificationType.reply,
+          uid: repliedToUserId,
+        );
       }
     });
     state = false;
@@ -247,12 +247,12 @@ class TweetController extends StateNotifier<bool> {
     final res = await _tweetAPI.shareTweet(tweet);
     res.fold((l) => showSnackBar(context, l.message), (r) {
       if (repliedToUserId.isNotEmpty) {
-        // _notificationController.createNotification(
-        //   text: '${user.name} replied to your tweet!',
-        //   postId: r.$id,
-        //   notificationType: NotificationType.reply,
-        //   uid: repliedToUserId,
-        // );
+        _notificationController.createNotification(
+          text: '${user.name} replied to your tweet!',
+          postId: r.$id,
+          notificationType: NotificationType.reply,
+          uid: repliedToUserId,
+        );
       }
     });
     state = false;
