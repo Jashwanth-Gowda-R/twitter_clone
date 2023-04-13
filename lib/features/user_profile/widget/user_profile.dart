@@ -66,12 +66,22 @@ class UserProfile extends ConsumerWidget {
                                 context,
                                 EditProfileView.route(),
                               );
+                            } else {
+                              ref
+                                  .read(userProfileControllerProvider.notifier)
+                                  .followUser(
+                                    user: user,
+                                    context: context,
+                                    currentUser: currentUser,
+                                  );
                             }
                           },
                           child: Text(
                             currentUser.uid == user.uid
                                 ? 'edit Profile'
-                                : 'Follow',
+                                : currentUser.following.contains(user.uid)
+                                    ? "UnFollow"
+                                    : 'Follow',
                             style: const TextStyle(
                               color: Pallete.whiteColor,
                             ),
