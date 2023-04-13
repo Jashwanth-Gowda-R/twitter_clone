@@ -1,6 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twitter_clone/common/common.dart';
+import 'package:twitter_clone/constants/constants.dart';
+import 'package:twitter_clone/features/user_profile/controller/user_profile_controller.dart';
 import 'package:twitter_clone/features/user_profile/widget/user_profile.dart';
 
 import 'package:twitter_clone/models/user_model.dart';
@@ -20,10 +23,24 @@ class UserProfileView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    UserModel copyOfUser = userModel;
     return Scaffold(
-      body: UserProfile(
-        user: userModel,
-      ),
+      body: ref.watch(getLatestUserProfileDataProvider).when(
+            data: (data) {
+              if (data.events.contains(
+                'databases.*.collections.${AppwriteConstants.userCollectionId}.documents.${copyOfUser.uid}.update',
+              )) {
+                copyOfUser = UserModel.fromMap(data.payload);
+              }
+              return UserProfile(user: copyOfUser);
+            },
+            error: (error, st) => ErrorText(
+              error: error.toString(),
+            ),
+            loading: () {
+              return UserProfile(user: copyOfUser);
+            },
+          ),
     );
   }
 }
