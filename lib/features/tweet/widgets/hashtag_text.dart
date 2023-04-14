@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:twitter_clone/features/tweet/views/hashtag_view.dart';
 import 'package:twitter_clone/theme/pallete.dart';
 
 class HashtagText extends StatelessWidget {
@@ -23,13 +25,13 @@ class HashtagText extends StatelessWidget {
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
-            // recognizer: TapGestureRecognizer()
-            //   ..onTap = () {
-            //     Navigator.push(
-            //       context,
-            //       HashtagView.route(element),
-            //     );
-            //   },
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigator.push(
+                  context,
+                  HashtagView.route(element),
+                );
+              },
           ),
         );
       } else if (element.startsWith('www.') || element.startsWith('https://')) {
